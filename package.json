@@ -1,0 +1,18 @@
+{
+  "name": "dndBot",
+  "version": "1.0.0",
+  "description": "chatbot to help with some D&D things",
+  "main": "index.js",
+  "author": "Liam Kennedy <liam@lkenn.xyz>",
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^8.0.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-node": "^9.1.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "mongoose": "^5.6.0",
+    "node-telegram-bot-api": "^0.30.0"
+  }
+}
