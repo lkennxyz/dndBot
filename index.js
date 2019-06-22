@@ -20,7 +20,7 @@ bot.onText(/\/help/, (msg) => {
   const reply = '/roll <arg> - rolls the number and size of dice you enter, e.g. 1d6\n'
     +'/suggest <arg> - suggests a magic item to be saved, give as much description as you can\n'
     +'/players - lists the player names, classes and races\n'
-    +'/search [spells/features] <args> - search for information on a spell or class feature'
+    +'/search [spells/features/items] <args> - search for information on a spell or class feature'
   bot.sendMessage(chatId, reply);
 });
 
@@ -54,8 +54,10 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
   let reply = '';
   if (query[0] === 'spell' || query[0] === 'spells')
     reply = await spells(query.slice(1));
-  if (query[0] === 'feature' || query[0] === 'features')
+  else if (query[0] === 'feature' || query[0] === 'features')
     reply = await features(query.slice(1));
+  else if (query[0] === 'item' || query[0] === 'items' || query[0] === 'equipment')
+    reply = await items(query.slice(1));
   bot.sendMessage(chatId, reply);
 });
 
@@ -137,5 +139,23 @@ async function features(query) {
   const result = await apiSearch('features', query);
   const reply = `${result.name}\n`
     +`Description: ${result.desc}\n`;
+  return reply;
+}
+
+async function items(query) {
+  const result = await apiSearch('equipment', query);
+  let reply = '';
+  if (result.equipment_category === 'Weapon') {
+    reply = `${result.name}\n`
+      + `${result.category_range} ${result.equipment_category}\n`
+      + `${result.dice_count}d${result.dice_value} ${result.damage.damage_type.name} Damage\n`
+      + `Range: ${(result.range.long)? result.range.normal + '/' + result.range.long : result.range.normal}`
+      + `Properties: ${result.properties.map(el => el.name).join(', ')}`
+      + `Cost: ${result.cost.quantity}${result.cost.unit}`;
+  } /* else if (result.equipment_category === 'Armor') {
+    reply = `${result.name}\n`
+      + `${result.subtype} ${result.type}`
+      + `${}`
+  } */
   return reply;
 }
