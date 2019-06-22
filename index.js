@@ -148,14 +148,22 @@ async function items(query) {
   if (result.equipment_category === 'Weapon') {
     reply = `${result.name}\n`
       + `${result.category_range} ${result.equipment_category}\n`
-      + `${result.dice_count}d${result.dice_value} ${result.damage.damage_type.name} Damage\n`
-      + `Range: ${(result.range.long)? result.range.normal + '/' + result.range.long : result.range.normal}`
-      + `Properties: ${result.properties.map(el => el.name).join(', ')}`
+      + `${result.damage.dice_count}d${result.damage.dice_value} ${result.damage.damage_type.name} Damage\n`
+      + `Range: ${(result.range.long)? result.range.normal + '/' + result.range.long : result.range.normal}\n`
+      + `Properties: ${result.properties.map(el => el.name).join(', ')}\n`
       + `Cost: ${result.cost.quantity}${result.cost.unit}`;
-  } /* else if (result.equipment_category === 'Armor') {
+  } else if (result.equipment_category === 'Armor') {
     reply = `${result.name}\n`
-      + `${result.subtype} ${result.type}`
-      + `${}`
-  } */
+      + `${result.armor_category} ${result.equipment_category}\n`
+      + `${result.armor_class.base}AC`
+      + (result.armor_class.dex_bonus) ? ' + DEX\n' : '\n'
+      + `Cost: ${result.cost.quantity}${result.cost.unit}\n`;
+      + (result.str_minimum > 0) ? `Minimum Strength: ${result.str_minimum}\n` : ''
+      + (result.stealth_disadvantage) ? 'Stealth Disadvantage' : ''
+  } else if (result.equipment_category === 'Adventuring Gear') {
+    reply = `${result.name}\n`
+      + `Description: ${result.desc.join(' ')}\n`
+      + `Cost: ${result.cost.quantity}${result.cost.unit}`;
+  }
   return reply;
 }
