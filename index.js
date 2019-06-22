@@ -5,7 +5,6 @@ const axios = require('axios');
 const token = process.env.TELEGRAM_BOT_TOKEN;
 const options = {
   webHook: {
-    // Just use 443 directly
     port: process.env.PORT,
   }
 };
@@ -15,6 +14,15 @@ const Item = setSchema();
 const herokuUrl = process.env.APP_URL || 'https://lif-bot.herokuapp.com:443';
 const bot = new TelegramBot(token, options);
 bot.setWebHook(`${herokuUrl}/bot${token}`);
+
+bot.onText(/\/help/, (msg) => {
+  const chatId = msg.chat.id;
+  const reply = '/roll <arg> - rolls the number and size of dice you enter, e.g. 1d6'
+    +'/suggest <arg> - suggests a magic item to be saved, give as much description as you can'
+    +'/players - lists the player names, classes and races'
+    +'/search [spells/features] <args> - search for information on a spell or class feature'
+  bot.sendMessage(chatId, reply);
+});
 
 bot.onText(/\/roll (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
