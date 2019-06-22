@@ -117,6 +117,8 @@ async function apiSearch(type, words) {
     const res1 = await axios.get(`http://dnd5eapi.co/api/${type}`)
     const results = res1.data.results;
     const selection = await results.find(result => result.name.toLowerCase() === words.join(' ').toLowerCase());
+    if (!selection)
+      return 'Sorry I couldn\'t find that';
     const res = await axios.get(selection.url);
     return res.data;
   } catch (err) {
@@ -126,6 +128,8 @@ async function apiSearch(type, words) {
 
 async function spells(query) {
   const result = await apiSearch('spells', query);
+  if (!result.name)
+    return result;
   const reply = `${result.name}\n`
     + `Description: ${result.desc}\n`
     + `Range: ${result.range}\n`
@@ -137,6 +141,8 @@ async function spells(query) {
 
 async function features(query) {
   const result = await apiSearch('features', query);
+  if (!result.name)
+    return result;
   const reply = `${result.name}\n`
     +`Description: ${result.desc}\n`;
   return reply;
@@ -144,6 +150,8 @@ async function features(query) {
 
 async function items(query) {
   const result = await apiSearch('equipment', query);
+  if (!result.name)
+    return result;
   let reply = '';
   if (result.equipment_category === 'Weapon') {
     reply = `${result.name}\n`
