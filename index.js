@@ -156,10 +156,10 @@ async function items(query) {
     reply = `${result.name}\n`
       + `${result.armor_category} ${result.equipment_category}\n`
       + `${result.armor_class.base}AC`
-      // + (result.armor_class.dex_bonus) ? ' + DEX\n' : '\n'
+      + (result.armor_class.dex_bonus) ? + ' + DEX\n' : +'\n'
       + `Cost: ${result.cost.quantity}${result.cost.unit}\n`;
-      + (result.str_minimum > 0) ? `Minimum Strength: ${result.str_minimum}\n` : ''
-      + (result.stealth_disadvantage) ? 'Stealth Disadvantage' : ''
+      + (result.str_minimum > 0) ? + `Minimum Strength: ${result.str_minimum}\n` : + ''
+      + (result.stealth_disadvantage) ? + 'Stealth Disadvantage' : + ''
   } else if (result.equipment_category === 'Adventuring Gear') {
     reply = `${result.name}\n`
       + `Description: ${result.desc.join(' ')}\n`
