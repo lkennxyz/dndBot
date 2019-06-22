@@ -164,6 +164,8 @@ async function items(query) {
     reply = `${result.name}\n`
       + `Description: ${result.desc.join(' ')}\n`
       + `Cost: ${result.cost.quantity}${result.cost.unit}`;
+  } else {
+    reply = `Sorry, I couldn't find anything with the name ${query.join(' ')}`
   }
   return reply;
 }
