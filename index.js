@@ -84,13 +84,14 @@ async function suggestItem(description) {
 async function dbConnect() {
   const username = process.env.DB_USER;
   const password = process.env.DB_PW;
+  const url = process.env.DB_URL.replace('<username>', username).replace('<password>',password)
   try {
-    await mongoose.connect(`mongodb+srv://${username}:${password}@cluster0-dxoyz.mongodb.net/DNDDB?retryWrites=true&w=majority`,
+    await mongoose.connect( url,
       { useNewUrlParser: true });
     const db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'DB Connection Error'));
+    db.on('error', console.error('DB Connection Error'));
     db.once('open', () => {
-      console.log.bind(console, 'Connected to DB');
+      console.log('Connected to DB');
     });
   } catch (err) {
     console.error(err);
