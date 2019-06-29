@@ -13,7 +13,7 @@ const herokuUrl = process.env.APP_URL || 'https://lif-bot.herokuapp.com:443';
 const bot = new TelegramBot(token, options);
 bot.setWebHook(`${herokuUrl}/bot${token}`);
 
-bot.onText(/\/help/, (msg) => {
+bot.onText(/\/[Hh][Ee][Ll][Pp]/, (msg) => {
   const chatId = msg.chat.id;
   const reply = '/roll <arg> - rolls the number and size of dice you enter, e.g. 1d6\n'
     +'/suggest <arg> - suggests a magic item to be saved, give as much description as you can\n'
@@ -22,7 +22,7 @@ bot.onText(/\/help/, (msg) => {
   bot.sendMessage(chatId, reply);
 });
 
-bot.onText(/\/roll (.+)/, (msg, match) => {
+bot.onText(/\/[Rr][Oo][Ll][Ll] (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
   const dice = match[1].toLowerCase().split('d');
   const rolls = rollDice(dice[0], dice[1]);
@@ -30,13 +30,13 @@ bot.onText(/\/roll (.+)/, (msg, match) => {
   bot.sendMessage(chatId, rollReply);
 });
 
-bot.onText(/\/suggest (.+)/, (msg, match) => {
+bot.onText(/\/[Ss][Uu][Gg][Gg][Ee][Ss][Tt] (.+)/, (msg, match) => {
   suggestItem(match[1]);
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, 'Thanks for the suggestion!');
 });
 
-bot.onText(/\/players/, (msg) => {
+bot.onText(/\/[Pp][Ll][Aa][Yy][Ee][Rr][Ss]/, (msg) => {
   const chatId = msg.chat.id;
   const players = 'Jack: Salleek - Aarakocra - Monk\n'
   +'Rory: Thinkkibrick - Gnome - Warlock\n'
@@ -46,7 +46,7 @@ bot.onText(/\/players/, (msg) => {
   bot.sendMessage(chatId, players);
 });
 
-bot.onText(/\/search (.+)/, async (msg, match) => {
+bot.onText(/\/[Ss][Ee][Aa][Rr][Cc][Hh] (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const query = match[1].split(' ');
   let reply = '';
