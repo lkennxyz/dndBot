@@ -18,7 +18,8 @@ bot.onText(/\/[Hh][Ee][Ll][Pp]/, (msg) => {
   const reply = '/roll <arg> - rolls the number and size of dice you enter, e.g. 1d6\n'
     +'/suggest <arg> - suggests a magic item to be saved, give as much description as you can\n'
     +'/players - lists the player names, classes and races\n'
-    +'/search [spells/features/items] <args> - search for information on a spell or class feature'
+    +'/search [spells/features/items] <args> - search for information on a spell or class feature\n'
+    +'/game - Gives the URL for the game on roll20';
   bot.sendMessage(chatId, reply);
 });
 
