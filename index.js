@@ -59,3 +59,9 @@ bot.onText(/\/[Ss][Ee][Aa][Rr][Cc][Hh] (.+)/, async (msg, match) => {
   bot.sendMessage(chatId, reply);
 });
 
+bot.onText(/\/[Gg][Aa][Mm][Ee]/, async (msg) => {
+  const chatId = msg.chat.id;
+  const reply = `Your game is here: ${process.env.GAME_URL}`;
+  bot.sendMessage(chatId, reply);
+});
+
