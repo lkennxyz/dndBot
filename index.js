@@ -13,6 +13,10 @@ const herokuUrl = process.env.APP_URL || 'https://lif-bot.herokuapp.com:443';
 const bot = new TelegramBot(token, options);
 bot.setWebHook(`${herokuUrl}/bot${token}`);
 
+bot.on('message', msg => {
+  console.log(`${msg.id} - ${msg.chat.id} - ${msg.chat.title}: ${msg.text}`);
+});
+
 bot.onText(/\/[Hh][Ee][Ll][Pp]/, (msg) => {
   const chatId = msg.chat.id;
   const reply = '/roll <arg> - rolls the number and size of dice you enter, e.g. 1d6\n'
