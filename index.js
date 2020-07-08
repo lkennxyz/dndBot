@@ -32,11 +32,9 @@ bot.onText(/\/[Rr][Oo][Ll][Ll] (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
   const dice = match[1].toLowerCase().split('d');
   const maxDice = parseInt(process.env.MAX_DICE) || 12;
-  console.log(maxDice);
   const tooBig = dice[0] > maxDice;
-  console.log(tooBig);
   const badDice = !validDice.includes(dice[1]);
-  const error = dice[0] > 12 || !validDice.includes(dice[1]) ? `Invalid dice roll:${tooBig ? ' Too many dice, max is ' + maxDice : ''} ${badDice ? ' Dice ' + dice[1] + ' invalid, valid dice are: ' + validDice.toString() : ''}` : null;
+  const error = dice[0] > maxDice || !validDice.includes(dice[1]) ? `Invalid dice roll:${tooBig ? ' Too many dice, max is ' + maxDice : ''} ${badDice ? ' Dice ' + dice[1] + ' invalid, valid dice are: ' + validDice.toString() : ''}` : null;
   if (error) {
     console.log(`Error: ${error}`);
   }
