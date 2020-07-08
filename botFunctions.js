@@ -5,10 +5,10 @@ const fnExport = module.exports = {};
 async function dbConnect() {
   const username = process.env.DB_USER;
   const password = process.env.DB_PW;
-  const url = process.env.DB_URL.replace('<username>', username).replace('<password>',password)
+  const url = process.env.DB_URL.replace('<username>', username).replace('<password>', password)
   try {
-    await mongoose.connect( url,
-      { useNewUrlParser: true });
+    await mongoose.connect(url,
+      {useNewUrlParser: true});
     const db = mongoose.connection;
     db.on('error', console.error('DB Connection Error'));
     db.once('open', () => {
@@ -17,7 +17,7 @@ async function dbConnect() {
   } catch (err) {
     console.error(err);
   }
-  
+
 }
 
 function dbClose() {
@@ -25,7 +25,7 @@ function dbClose() {
   db.close();
 }
 
-function setSchema() {
+function setItemSchema() {
   const Schema = mongoose.Schema;
   const itemSchema = new Schema({
     description: String,
@@ -34,28 +34,43 @@ function setSchema() {
   return Item;
 }
 
-fnExport.rollDice = function(num, size) {
+function setNameSchema() {
+  const Schema = mongoose.Schema;
+  const nameSchema = new Schema({
+    male: String,
+    female: String,
+    surname: String,
+  });
+}
+
+fnExport.rollDice = function (num, size) {
   let total = 0;
   const rolls = [];
   for (let i = 0; i < num; i++) {
-      const roll = Math.floor(Math.random() * size + 1);
-      total += roll;
-      rolls.push(roll);
+    const roll = size != '%' ? 
+      Math.floor(Math.random() * size + 1) :
+      10 * (Math.floor(Math.random() * 10 + 1)) + (Math.floor(Math.random() * 10 + 1));
+    total += roll;
+    rolls.push(roll);
   }
-  return { total, rolls };
+  return {total, rolls};
 }
 
-fnExport.suggestItem = async function(description) {
+fnExport.suggestItem = async function (description) {
   dbConnect();
-  const Item = setSchema();
-  const suggestion = new Item({ description });
+  const Item = setItemSchema();
+  const suggestion = new Item({description});
   await suggestion.save((err) => {
     if (err) return console.error(err);
     dbClose();
   });
 }
 
-
+fnExport.getName = async function (race, sex) {
+  dbConnect();
+  const Name = setNameSchema();
+  const 
+};
 
 async function apiSearch(type, words) {
   try {
@@ -71,7 +86,7 @@ async function apiSearch(type, words) {
   }
 }
 
-fnExport.spells = async function(query) {
+fnExport.spells = async function (query) {
   const result = await apiSearch('spells', query);
   if (!result.name)
     return result;
@@ -84,16 +99,16 @@ fnExport.spells = async function(query) {
   return reply;
 }
 
-fnExport.features = async function(query) {
+fnExport.features = async function (query) {
   const result = await apiSearch('features', query);
   if (!result.name)
     return result;
   const reply = `${result.name}\n`
-    +`Description: ${result.desc}\n`;
+    + `Description: ${result.desc}\n`;
   return reply;
 }
 
-fnExport.items = async function(query) {
+fnExport.items = async function (query) {
   const result = await apiSearch('equipment', query);
   if (!result.name)
     return result;
@@ -102,7 +117,7 @@ fnExport.items = async function(query) {
     reply = `${result.name}\n`
       + `${result.category_range} ${result.equipment_category}\n`
       + `${result.damage.dice_count}d${result.damage.dice_value} ${result.damage.damage_type.name} Damage\n`
-      + `Range: ${(result.range.long)? result.range.normal + '/' + result.range.long : result.range.normal}\n`
+      + `Range: ${(result.range.long) ? result.range.normal + '/' + result.range.long : result.range.normal}\n`
       + `Properties: ${result.properties.map(el => el.name).join(', ')}\n`
       + `Cost: ${result.cost.quantity}${result.cost.unit}`;
   } else if (result.equipment_category === 'Armor') {
@@ -111,7 +126,7 @@ fnExport.items = async function(query) {
       + `${result.armor_class.base}AC`
       + `${(result.armor_class.dex_bonus) ? ' + DEX\n' : '\n'}`
       + `Cost: ${result.cost.quantity}${result.cost.unit}\n`;
-      + `${(result.str_minimum > 0) ? 'MinimumStrength: result.str_minimum\n' : ''}`
+    + `${(result.str_minimum > 0) ? 'MinimumStrength: result.str_minimum\n' : ''}`
       + `${(result.stealth_disadvantage) ? 'Stealth Disadvantage' : ''}`
   } else if (result.equipment_category === 'Adventuring Gear') {
     reply = `${result.name}\n`
