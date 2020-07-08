@@ -66,12 +66,6 @@ fnExport.suggestItem = async function (description) {
   });
 }
 
-fnExport.getName = async function (race, sex) {
-  dbConnect();
-  const Name = setNameSchema();
-  const 
-};
-
 async function apiSearch(type, words) {
   try {
     const res1 = await axios.get(`http://dnd5eapi.co/api/${type}`)
