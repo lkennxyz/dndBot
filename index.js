@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const { rollDice, suggestItem, spells, features, items } = require('./botFunctions');
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
-const validDice = [4, 6, 8, 12, 20, '%'];
+const validDice = ['4', '6', '8', '12', '20', '%'];
 const options = {
   webHook: {
     port: process.env.PORT,
@@ -30,11 +30,14 @@ bot.onText(/\/[Hh][Ee][Ll][Pp]/, (msg) => {
 
 bot.onText(/\/[Rr][Oo][Ll][Ll] (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
-
   const dice = match[1].toLowerCase().split('d');
-  const error = dice[0] > 12 || !validDice.includes(dice[1]) ? 'Invalid dice roll!' : null;
+  const tooBig = dice[0] > 12;
+  const badDice = !validDice.includes(dice[1]);
+  console.log(`too big: ${tooBig}, badDice: ${badDice}`);
+  const error = dice[0] > 12 || !validDice.includes(dice[1]) ? `Invalid dice roll:${tooBig && ' Too many dice'} ${badDice && ' Dice choice invalid'}` : null;
+  console.log(`Error: ${error}`);
   const rolls = rollDice(dice[0], dice[1]);
-  const rollReply = (error)? error : `You rolled a total of ${rolls.total}, with rolls of ${rolls.rolls}`;
+  const rollReply = (error) ? error : `You rolled a total of ${rolls.total}, with rolls of ${rolls.rolls}`;
   bot.sendMessage(chatId, rollReply);
 });
 
