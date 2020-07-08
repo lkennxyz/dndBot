@@ -34,7 +34,7 @@ bot.onText(/\/[Rr][Oo][Ll][Ll] (.+)/, (msg, match) => {
   const tooBig = dice[0] > 12;
   const badDice = !validDice.includes(dice[1]);
   console.log(`too big: ${tooBig}, badDice: ${badDice}`);
-  const error = dice[0] > 12 || !validDice.includes(dice[1]) ? `Invalid dice roll:${tooBig && ' Too many dice'} ${badDice && ' Dice choice invalid'}` : null;
+  const error = dice[0] > 12 || !validDice.includes(dice[1]) ? `Invalid dice roll:${tooBig ? ' Too many dice' : ''} ${badDice ? ' Dice ' + dice[1] + ' invalid, valid dice are: ' + validDice.toString() : ''}` : null;
   console.log(`Error: ${error}`);
   const rolls = rollDice(dice[0], dice[1]);
   const rollReply = (error) ? error : `You rolled a total of ${rolls.total}, with rolls of ${rolls.rolls}`;
